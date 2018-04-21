@@ -1,33 +1,26 @@
-yii2-telize (DEPRECATED)
-========================
+# yii2-geoip
 
-**Extension is deprecated. More info [here](http://www.cambus.net/adventures-in-running-a-free-public-api/).**
+An extension that allows you to obtain the visitor's IP address and location information from any IP address. Uses http://sypexgeo.net/ for online and http://www.ip2location.com/ library for offline data retrieval.
 
-Wrapper of service offers a REST API allowing to get a visitor IP address and 
-to query location information from any IP address. http://www.telize.com/
+## Installation
 
-Installation
-------------
+The preferred way to install this extension through [composer](http://getcomposer.org/download/).
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
-
-Either run
+You can set the console
 
 ```
-php composer.phar require --prefer-dist bupy7/yii2-telize "*"
+$ composer require "scorpsan/yii2-geoip"
 ```
 
 or add
 
 ```
-"bupy7/yii2-telize": "*"
+"scorpsan/yii2-geoip": "*"
 ```
 
-to the require section of your `composer.json` file.
+in ```require``` section in `composer.json` file.
 
-
-Usage
------
+## Using
 
 Once the extension is installed, simply use it in your code by  :
 
@@ -38,7 +31,7 @@ Add following code to your configuration file of application:
 'components' => [
     ...
     'geoIp' => [
-        'class' => 'bupy7\telize\GeoIp',
+        'class' => 'scorpsan\geoip\GeoIp',
         'externalIp' => YII_ENV_DEV,
     ],
     ...
@@ -46,17 +39,118 @@ Add following code to your configuration file of application:
 ...
 ```
 
-Get information from IP address:
+Get information from Ip User:
+Online
 
 ```php
 var_dump(Yii::$app->geoIp->info);
-// or select address
+```
+
+Offline
+
+```php
+var_dump(Yii::$app->geoIp->infoDb);
+```
+
+Get information from Select Ip:
+Online
+
+```php
 var_dump(Yii::$app->geoIp->getInfo('255.255.255.255'));
-// get ip
+```
+
+Offline
+```php
+var_dump(Yii::$app->geoIp->getInfoDb('255.255.255.255'));
+```
+
+Get User Ip:
+
+```php
 var_dump(Yii::$app->geoIp->ip);
 ```
 
+## Return Data
 
-##License
+```php
+Online
+     * Returned information by IP address with following paramters:
+     * - `ip`               - Visitor IP address, or IP address specified as parameter.
+     * - `city`             - Object Region information
+     * -- [id] => 625144
+     * -- [lat] => 53.9
+     * -- [lon] => 27.56667
+     * -- [name_ru] => Минск
+     * -- [name_en] => Minsk
+     * -- [name_de] => Minsk
+     * -- [name_fr] => Minsk
+     * -- [name_it] => Minsk
+     * -- [name_es] => Minsk
+     * -- [name_pt] => Minsk
+     * -- [okato] => 5000000000
+     * -- [vk] => 282
+     * -- [population] => 1742124
+     * - `region`           - Object Region information
+     * -- [id] => 625143
+     * -- [lat] => 53.9
+     * -- [lon] => 27.57
+     * -- [name_ru] => Минск
+     * -- [name_en] => Horad Minsk
+     * -- [name_de] => Minsk
+     * -- [name_fr] => Minsk
+     * -- [name_it] => Minsk
+     * -- [name_es] => Minsk
+     * -- [name_pt] => Minsk
+     * -- [iso] => BY-HM
+     * -- [timezone] => Europe/Minsk
+     * -- [okato] => 5
+     * -- [auto] => 7
+     * -- [vk] => 0
+     * -- [utc] => 3
+     * - `country`          - Object Country information
+     * -- [id] => 36
+     * -- [iso] => BY
+     * -- [continent] => EU
+     * -- [lat] => 53
+     * -- [lon] => 28
+     * -- [name_ru] => Беларусь
+     * -- [name_en] => Belarus
+     * -- [name_de] => Weißrussland
+     * -- [name_fr] => Biélorussie
+     * -- [name_it] => Bielorussia
+     * -- [name_es] => Bielorrusia
+     * -- [name_pt] => Bielorrússia
+     * -- [timezone] => Europe/Minsk
+     * -- [area] => 207600
+     * -- [population] => 9685000
+     * -- [capital_id] => 625144
+     * -- [capital_ru] => Минск
+     * -- [capital_en] => Minsk
+     * -- [cur_code] => BYR
+     * -- [phone] => 375
+     * -- [neighbours] => PL,LT,UA,RU,LV
+     * -- [vk] => 3
+     * -- [utc] => 3
+     * - `error`            - Error data.
+     * - `request`          - Request code.
+     * - `created`          - Date create info in dstsbase.
+     * - `timestamp`        - Timestanp request.
+     *
+     * @return array|false
+     */
+```
 
-yii2-widget-cropbox is released under the BSD 3-Clause License.
+```php
+Offline
+     * Returned information by IP address with following paramters:
+     * - `ipAddress`       - Visitor IP address, or IP address specified as parameter.
+     * - `countryName`     - Name Country in English.
+     * - `countryCode`     - Two-letter ISO 3166-1 alpha-2 country code.
+     *
+     * @return array|false
+     */
+```
+
+## License
+
+yii2-geoip is released under the BSD 3-Clause License.
